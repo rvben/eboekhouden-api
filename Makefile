@@ -18,7 +18,7 @@ setup:
 deploy:
 	ssh $(HOST) 'mkdir -p $(REMOTE_DIR)/src/routes'
 	scp package.json Dockerfile docker-compose.yml .env $(HOST):$(REMOTE_DIR)/
-	scp src/server.mjs src/eboekhouden.mjs src/db.mjs src/errors.mjs src/routes.mjs $(HOST):$(REMOTE_DIR)/src/
+	scp src/server.mjs src/eboekhouden.mjs src/db.mjs src/errors.mjs src/routes.mjs src/cli.mjs $(HOST):$(REMOTE_DIR)/src/
 	scp src/routes/offerte.mjs src/routes/read.mjs src/routes/relatie.mjs $(HOST):$(REMOTE_DIR)/src/routes/
 	ssh $(HOST) 'cd $(REMOTE_DIR) && docker compose up -d --build'
 
