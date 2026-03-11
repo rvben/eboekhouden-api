@@ -1,0 +1,14 @@
+{
+	"name": "eboekhouden-api",
+	"version": "1.0.0",
+	"type": "module",
+	"scripts": {
+		"start": "node src/server.mjs",
+		"dev": "node --watch src/server.mjs",
+		"cli": "node src/cli.mjs"
+	},
+	"dependencies": {
+		"better-sqlite3": "^11.9.1",
+		"playwright": "^1.58.2"
+	}
+}

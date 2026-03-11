@@ -1,0 +1,23 @@
+services:
+  eboekhouden-api:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - eboekhouden-data:/data
+    shm_size: 512m
+    environment:
+      - API_KEY=${API_KEY}
+      - EBOEKHOUDEN_USERNAME=${EBOEKHOUDEN_USERNAME}
+      - EBOEKHOUDEN_PASSWORD=${EBOEKHOUDEN_PASSWORD}
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token ${TUNNEL_TOKEN}
+    depends_on:
+      - eboekhouden-api
+
+volumes:
+  eboekhouden-data:
