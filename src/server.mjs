@@ -15,8 +15,8 @@ const IDLE_TIMEOUT_MS = parseInt(process.env.IDLE_TIMEOUT_MS || "300000", 10); /
 const HANDLER_TIMEOUT_MS = parseInt(process.env.HANDLER_TIMEOUT_MS || "120000", 10); // 2 min
 const READONLY = process.env.READONLY === "true";
 
-if (!API_KEY || !USERNAME || !PASSWORD) {
-	console.error("Missing required env vars: API_KEY, EBOEKHOUDEN_USERNAME, EBOEKHOUDEN_PASSWORD");
+if (!USERNAME || !PASSWORD) {
+	console.error("Missing required env vars: EBOEKHOUDEN_USERNAME, EBOEKHOUDEN_PASSWORD");
 	process.exit(1);
 }
 
@@ -187,7 +187,7 @@ const server = http.createServer(async (req, res) => {
 	}
 
 	// Auth check
-	if (route.auth) {
+	if (route.auth && API_KEY) {
 		const auth = req.headers.authorization || "";
 		const expected = `Bearer ${API_KEY}`;
 		const ok = auth.length === expected.length
@@ -242,6 +242,7 @@ const server = http.createServer(async (req, res) => {
 server.listen(PORT, () => {
 	console.log(`e-Boekhouden API listening on port ${PORT}`);
 	console.log(`Mode: ${READONLY ? "read-only" : "read-write"}`);
+	console.log(`Auth: ${API_KEY ? "enabled" : "disabled (no API_KEY set)"}`);
 	console.log(`Idle timeout: ${IDLE_TIMEOUT_MS / 1000}s`);
 	console.log(`API docs: http://localhost:${PORT}/api/docs`);
 });

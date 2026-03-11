@@ -68,7 +68,7 @@ All authenticated endpoints require a `Authorization: Bearer <API_KEY>` header.
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `API_KEY` | Yes | — | Bearer token for API authentication |
+| `API_KEY` | No | — | Secret you choose to protect the API (used as `Bearer` token). If unset, auth is disabled. |
 | `EBOEKHOUDEN_USERNAME` | Yes | — | e-Boekhouden login username |
 | `EBOEKHOUDEN_PASSWORD` | Yes | — | e-Boekhouden login password |
 | `PORT` | No | `3000` | Server port |
