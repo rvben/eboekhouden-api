@@ -4,6 +4,26 @@ import { chromium } from "playwright";
 const GOTO_OPTIONS = { waitUntil: "load", timeout: 30000 };
 const DROPDOWN_SELECTOR = ".autocomplete-item, .dropdown-item, .AutocompleteDropdown li, .autocomplete-results li, [class*='autocomplete'] li, [class*='dropdown'] li:not(.disabled)";
 
+const CHROME_ARGS = [
+	"--disable-gpu",
+	"--disable-dev-shm-usage",
+	"--disable-software-rasterizer",
+	"--disable-extensions",
+	"--disable-background-networking",
+	"--disable-default-apps",
+	"--disable-sync",
+	"--metrics-recording-only",
+	"--no-first-run",
+	"--disable-background-timer-throttling",
+	"--disable-backgrounding-occluded-windows",
+	"--disable-component-update",
+	"--disable-hang-monitor",
+	"--disable-ipc-flooding-protection",
+	"--disable-renderer-backgrounding",
+];
+
+const BLOCKED_RESOURCE_TYPES = new Set(["image", "stylesheet", "font", "media"]);
+
 export class EBoekhouden {
 	constructor({ username, password }) {
 		this.username = username;
@@ -13,9 +33,13 @@ export class EBoekhouden {
 	}
 
 	async launch() {
-		this.browser = await chromium.launch({ headless: true });
+		this.browser = await chromium.launch({ headless: true, args: CHROME_ARGS });
 		const context = await this.browser.newContext({ viewport: { width: 1280, height: 900 } });
 		this.page = await context.newPage();
+		await this.page.route("**/*", (route) => {
+			if (BLOCKED_RESOURCE_TYPES.has(route.request().resourceType())) return route.abort();
+			return route.continue();
+		});
 	}
 
 	async close() {
